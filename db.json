@@ -1,37 +1,30 @@
 {
   "users": [
     {
-      "id": "55a9",
+      "id": "8c97",
       "name": "Devesh Magre",
-      "email": "D@gmail.com",
+      "email": "deveshmagre1@gmail.com",
       "role": "Developer",
       "status": "Active"
     }
   ],
   "roles": [
     {
-      "id": "7ad5",
+      "id": "f9e4",
       "name": "Developer",
       "permissions": [
         "Read",
         "Write",
-        "test"
+        "Update",
+        "Delete"
       ]
     },
     {
-      "id": "7303",
+      "id": "3b0c",
       "name": "Tester",
       "permissions": [
         "Read",
-        "Write"
-      ]
-    },
-    {
-      "id": "b078",
-      "name": "De ve ",
-      "permissions": [
-        "jhfbvjd",
-        "hyvtjyf"
+        "Test"
       ]
     }
   ]
