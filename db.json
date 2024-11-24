@@ -1,0 +1,38 @@
+{
+  "users": [
+    {
+      "id": "55a9",
+      "name": "Devesh Magre",
+      "email": "D@gmail.com",
+      "role": "Developer",
+      "status": "Active"
+    }
+  ],
+  "roles": [
+    {
+      "id": "7ad5",
+      "name": "Developer",
+      "permissions": [
+        "Read",
+        "Write",
+        "test"
+      ]
+    },
+    {
+      "id": "7303",
+      "name": "Tester",
+      "permissions": [
+        "Read",
+        "Write"
+      ]
+    },
+    {
+      "id": "b078",
+      "name": "De ve ",
+      "permissions": [
+        "jhfbvjd",
+        "hyvtjyf"
+      ]
+    }
+  ]
+}
