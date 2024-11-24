@@ -35,7 +35,7 @@ const UserManagement = () => {
   const [editUser, setEditUser] = useState(null);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
 
-  // Validation error states
+ 
   const [errors, setErrors] = useState({ name: '', email: '', role: '', status: '' });
 
   useEffect(() => {
@@ -50,28 +50,24 @@ const UserManagement = () => {
     setRoles(rolesData);
   };
 
-  // Validation function with alphabet-only check for 'name'
   const validateUser = (user) => {
     const errors = {};
     
-    // Validate name to allow only alphabetic characters and spaces
     if (!user.name.trim()) {
       errors.name = 'Name is required.';
     } else if (!/^[A-Za-z\s]+$/.test(user.name)) {
       errors.name = 'Name can only contain letters and spaces.';
     }
     
-    // Validate email
+ 
     if (!user.email.trim() || !/\S+@\S+\.\S+/.test(user.email)) {
       errors.email = 'Valid email is required.';
     }
 
-    // Validate role
     if (!user.role.trim()) {
       errors.role = 'Role is required.';
     }
 
-    // Validate status
     if (!['Active', 'Inactive'].includes(user.status)) {
       errors.status = 'Valid status is required.';
     }
@@ -79,10 +75,10 @@ const UserManagement = () => {
     return errors;
   };
 
-  // Handle Name Change for 'newUser'
+  
   const handleNameChange = (e) => {
     const value = e.target.value;
-    // Allow only alphabetic characters and spaces
+   
     if (/^[A-Za-z\s]*$/.test(value)) {
       setNewUser({ ...newUser, name: value });
     }
@@ -97,7 +93,7 @@ const UserManagement = () => {
     const addedUser = await addUser(newUser);
     setUsers([...users, addedUser]);
     setNewUser({ name: '', email: '', role: '', status: 'Active' });
-    setErrors({}); // Reset errors
+    setErrors({}); 
   };
 
   const handleEditUser = (user) => {
@@ -115,7 +111,7 @@ const UserManagement = () => {
       await updateUser(editUser.id, editUser);
       fetchUsersData();
       setIsEditDialogOpen(false);
-      setErrors({}); // Reset errors
+      setErrors({});
     }
   };
 
@@ -135,7 +131,7 @@ const UserManagement = () => {
         <TextField
           label="Name"
           value={newUser.name}
-          onChange={handleNameChange}  // Allow only alphabetic input
+          onChange={handleNameChange} 
           error={!!errors.name}
           helperText={errors.name}
           style={{ width: '250px' }}
@@ -202,7 +198,7 @@ const UserManagement = () => {
     variant="outlined"
     color="primary"
     onClick={() => handleEditUser(user)}
-    style={{ width: '120px', marginRight: '10px' , marginBottom:'5px'}}  // Same width and gap for spacing
+    style={{ width: '120px', marginRight: '10px' , marginBottom:'5px'}} 
   >
     Edit
   </Button>
@@ -210,7 +206,7 @@ const UserManagement = () => {
     variant="contained"
     color="error"
     onClick={() => handleDeleteUser(user.id)}
-    style={{ width: '120px' }}  // Same width as the Edit button
+    style={{ width: '120px' }}  
   >
     Delete
   </Button>
@@ -231,7 +227,7 @@ const UserManagement = () => {
             value={editUser?.name || ''}
             onChange={(e) => {
               const value = e.target.value;
-              // Allow only alphabetic characters and spaces
+              
               if (/^[A-Za-z\s]*$/.test(value)) {
                 setEditUser({ ...editUser, name: value });
               }

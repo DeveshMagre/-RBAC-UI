@@ -16,18 +16,17 @@ import {
   DialogTitle,
   Snackbar
 } from '@mui/material';
-import { Alert } from '@mui/material'; // To display error messages
+import { Alert } from '@mui/material'; 
 
 const RoleManagement = () => {
   const [roles, setRoles] = useState([]);
   const [newRole, setNewRole] = useState({ name: '', permissions: '' });
-  const [openDialog, setOpenDialog] = useState(false); // To control the dialog visibility
-  const [currentRole, setCurrentRole] = useState(null); // To store the role being updated
-  const [error, setError] = useState(null); // To manage error messages
-  const [snackbarOpen, setSnackbarOpen] = useState(false); // To control snackbar visibility
-  const [isSubmitting, setIsSubmitting] = useState(false); // Track if form is being submitted
-  const [touched, setTouched] = useState(false); // Track if the user has interacted with the form
-
+  const [openDialog, setOpenDialog] = useState(false);
+  const [currentRole, setCurrentRole] = useState(null); 
+  const [error, setError] = useState(null); 
+  const [snackbarOpen, setSnackbarOpen] = useState(false); 
+  const [isSubmitting, setIsSubmitting] = useState(false); 
+  const [touched, setTouched] = useState(false);
   useEffect(() => {
     fetchRolesData();
   }, []);
@@ -38,12 +37,12 @@ const RoleManagement = () => {
   };
 
   const handleAddRole = async () => {
-    setTouched(true); // Mark the form as interacted with
-    setIsSubmitting(true); // Mark the form as being submitted
+    setTouched(true); 
+    setIsSubmitting(true); 
     if (!newRole.name.trim() || !newRole.permissions.trim()) {
       setError('Both Role Name and Permissions are required.');
       setSnackbarOpen(true);
-      setIsSubmitting(false); // Reset submitting state
+      setIsSubmitting(false); 
       return;
     }
 
@@ -51,24 +50,24 @@ const RoleManagement = () => {
     if (permissions.some((permission) => !permission)) {
       setError('Permissions must not contain empty values.');
       setSnackbarOpen(true);
-      setIsSubmitting(false); // Reset submitting state
+      setIsSubmitting(false); 
       return;
     }
 
     const addedRole = await addRole({ ...newRole, permissions });
     setRoles([...roles, addedRole]);
     setNewRole({ name: '', permissions: '' });
-    setTouched(false); // Reset touched state
-    setIsSubmitting(false); // Reset submitting state
+    setTouched(false);
+    setIsSubmitting(false); 
   };
 
   const handleUpdateRole = async () => {
-    setTouched(true); // Mark the form as interacted with
-    setIsSubmitting(true); // Mark the form as being submitted
+    setTouched(true); 
+    setIsSubmitting(true); 
     if (!currentRole?.name.trim() || !currentRole?.permissions.trim()) {
       setError('Both Role Name and Permissions are required.');
       setSnackbarOpen(true);
-      setIsSubmitting(false); // Reset submitting state
+      setIsSubmitting(false);
       return;
     }
 
@@ -76,16 +75,16 @@ const RoleManagement = () => {
     if (permissions.some((permission) => !permission)) {
       setError('Permissions must not contain empty values.');
       setSnackbarOpen(true);
-      setIsSubmitting(false); // Reset submitting state
+      setIsSubmitting(false);
       return;
     }
 
     const updatedRole = { ...currentRole, permissions };
     await updateRole(currentRole.id, updatedRole);
-    setOpenDialog(false); // Close dialog after updating
-    fetchRolesData(); // Refresh roles
-    setTouched(false); // Reset touched state
-    setIsSubmitting(false); // Reset submitting state
+    setOpenDialog(false);
+    fetchRolesData(); 
+    setTouched(false); 
+    setIsSubmitting(false); 
   };
 
   const handleDeleteRole = async (id) => {
@@ -98,12 +97,12 @@ const RoleManagement = () => {
       ...role,
       permissions: Array.isArray(role.permissions) ? role.permissions.join(', ') : role.permissions
     });
-    setOpenDialog(true); // Open the dialog when the button is clicked
+    setOpenDialog(true);
   };
 
   const handleCloseDialog = () => {
     setOpenDialog(false);
-    setCurrentRole(null); // Reset current role when closing
+    setCurrentRole(null);  
   };
 
   const handleSnackbarClose = () => {
@@ -128,7 +127,7 @@ const RoleManagement = () => {
           label="Role Name"
           value={newRole.name}
           onChange={(e) => setNewRole({ ...newRole, name: e.target.value })}
-          error={touched && !newRole.name.trim()} // Show error if the field is touched and empty
+          error={touched && !newRole.name.trim()} 
           helperText={touched && !newRole.name.trim() ? 'Role Name is required.' : ''}
           style={{ width: '100%', maxWidth: '400px' }}
         />
@@ -136,7 +135,7 @@ const RoleManagement = () => {
           label="Permissions (comma-separated)"
           value={newRole.permissions}
           onChange={(e) => setNewRole({ ...newRole, permissions: e.target.value })}
-          error={touched && !newRole.permissions.trim()} // Show error if the field is touched and empty
+          error={touched && !newRole.permissions.trim()}
           helperText={touched && !newRole.permissions.trim() ? 'Permissions are required.' : ''}
           style={{ width: '100%', maxWidth: '400px' }}
         />
@@ -150,7 +149,7 @@ const RoleManagement = () => {
         </Button>
       </div>
 
-      {/* Table to display roles */}
+     
       <TableContainer component={Paper} style={{ marginTop: '20px' }}>
         <Table>
           <TableHead>
@@ -189,7 +188,6 @@ const RoleManagement = () => {
         </Table>
       </TableContainer>
 
-      {/* Dialog for Updating Role */}
       <Dialog open={openDialog} onClose={handleCloseDialog}>
         <DialogTitle>Update Role Permissions</DialogTitle>
         <DialogContent>
@@ -204,7 +202,7 @@ const RoleManagement = () => {
             multiline
             rows={4}
             style={{ marginBottom: '20px' }}
-            error={touched && !currentRole?.permissions.trim()} // Show error if the field is touched and empty
+            error={touched && !currentRole?.permissions.trim()} 
             helperText={touched && !currentRole?.permissions.trim() ? 'Permissions are required.' : ''}
           />
         </DialogContent>
@@ -218,7 +216,7 @@ const RoleManagement = () => {
         </DialogActions>
       </Dialog>
 
-      {/* Snackbar for Error/Info Messages */}
+      
       <Snackbar
         open={snackbarOpen}
         autoHideDuration={6000}
