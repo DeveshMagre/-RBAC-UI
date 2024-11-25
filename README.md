@@ -1,5 +1,3 @@
-# -RBAC-UI
-
 # User and Role Management System
 
 This project provides a web application for managing users and roles in an organization. It allows administrators to add, edit, and delete users, as well as manage roles and permissions associated with them. The application uses **React** for the frontend and **Axios** for making API requests to a backend server.
@@ -63,6 +61,7 @@ If you haven't installed them yet, you can download Node.js from [here](https://
 5. Run the development server:
 
     ```bash
+    npm run json-server
     npm start
     ```
 
@@ -95,3 +94,9 @@ This application uses the following API functions for communication with the bac
   - `addRole(role)`: Add a new role.
   - `updateRole(id, role)`: Update a role by ID.
   - `deleteRole(id)`: Delete a role by ID.
+
+
+
+
+
+

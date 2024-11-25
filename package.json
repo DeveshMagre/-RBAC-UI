@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "scripts": {
     "start": "react-scripts start",
+    "build": "react-scripts build",
     "json-server": "json-server --watch db.json --port 5000"
   },
   "dependencies": {
