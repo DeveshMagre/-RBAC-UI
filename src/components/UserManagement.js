@@ -34,9 +34,8 @@ const UserManagement = () => {
   const [roles, setRoles] = useState([]);
   const [editUser, setEditUser] = useState(null);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
-
- 
   const [errors, setErrors] = useState({ name: '', email: '', role: '', status: '' });
+  const [searchQuery, setSearchQuery] = useState(''); // State for search query
 
   useEffect(() => {
     fetchUsersData();
@@ -44,44 +43,31 @@ const UserManagement = () => {
 
   const fetchUsersData = async () => {
     const usersData = await fetchUsers();
-    setUsers(usersData);
-
+    const sortedUsers = usersData.sort((a, b) => a.name.localeCompare(b.name));
+    setUsers(sortedUsers);
+  
     const rolesData = await fetchRoles();
     setRoles(rolesData);
   };
+  
 
   const validateUser = (user) => {
     const errors = {};
-    
     if (!user.name.trim()) {
       errors.name = 'Name is required.';
     } else if (!/^[A-Za-z\s]+$/.test(user.name)) {
       errors.name = 'Name can only contain letters and spaces.';
     }
-    
- 
     if (!user.email.trim() || !/\S+@\S+\.\S+/.test(user.email)) {
       errors.email = 'Valid email is required.';
     }
-
     if (!user.role.trim()) {
       errors.role = 'Role is required.';
     }
-
     if (!['Active', 'Inactive'].includes(user.status)) {
       errors.status = 'Valid status is required.';
     }
-
     return errors;
-  };
-
-  
-  const handleNameChange = (e) => {
-    const value = e.target.value;
-   
-    if (/^[A-Za-z\s]*$/.test(value)) {
-      setNewUser({ ...newUser, name: value });
-    }
   };
 
   const handleAddUser = async () => {
@@ -90,11 +76,15 @@ const UserManagement = () => {
       setErrors(validationErrors);
       return;
     }
+  
     const addedUser = await addUser(newUser);
-    setUsers([...users, addedUser]);
+    const updatedUsers = [...users, addedUser].sort((a, b) => a.name.localeCompare(b.name));
+    setUsers(updatedUsers);
+ 
     setNewUser({ name: '', email: '', role: '', status: 'Active' });
-    setErrors({}); 
+    setErrors({});
   };
+  
 
   const handleEditUser = (user) => {
     setEditUser(user);
@@ -120,18 +110,32 @@ const UserManagement = () => {
     setUsers(users.filter((user) => user.id !== id));
   };
 
+  const filteredUsers = users.filter((user) =>
+    user.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    user.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    user.role.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   return (
     <div style={{ padding: '20px' }}>
       <Typography variant="h4" gutterBottom align="center">
         User Management
       </Typography>
-      
-      {/* New User Form */}
+      <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '20px' }}>
+        <TextField
+          label="Search Users"
+          variant="outlined"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          style={{ width: '400px' }}
+        />
+      </div>
+
       <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '16px' }}>
         <TextField
           label="Name"
           value={newUser.name}
-          onChange={handleNameChange} 
+          onChange={(e) => setNewUser({ ...newUser, name: e.target.value })}
           error={!!errors.name}
           helperText={errors.name}
           style={{ width: '250px' }}
@@ -187,98 +191,35 @@ const UserManagement = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {users.map((user) => (
+            {filteredUsers.map((user) => (
               <TableRow key={user.id}>
                 <TableCell>{user.name}</TableCell>
                 <TableCell>{user.email}</TableCell>
                 <TableCell>{user.role}</TableCell>
                 <TableCell>{user.status}</TableCell>
                 <TableCell>
-  <Button
-    variant="outlined"
-    color="primary"
-    onClick={() => handleEditUser(user)}
-    style={{ width: '120px', marginRight: '10px' , marginBottom:'5px'}} 
-  >
-    Edit
-  </Button>
-  <Button
-    variant="contained"
-    color="error"
-    onClick={() => handleDeleteUser(user.id)}
-    style={{ width: '120px' }}  
-  >
-    Delete
-  </Button>
-</TableCell>
-
+                  <Button
+                    variant="outlined"
+                    color="primary"
+                    onClick={() => handleEditUser(user)}
+                    style={{ width: '120px', marginRight: '10px' }}
+                  >
+                    Edit
+                  </Button>
+                  <Button
+                    variant="contained"
+                    color="error"
+                    onClick={() => handleDeleteUser(user.id)}
+                    style={{ width: '120px' }}
+                  >
+                    Delete
+                  </Button>
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>
         </Table>
       </TableContainer>
-
-      {/* Edit User Dialog */}
-      <Dialog open={isEditDialogOpen} onClose={() => setIsEditDialogOpen(false)}>
-        <DialogTitle>Edit User</DialogTitle>
-        <DialogContent>
-          <TextField
-            label="Name"
-            value={editUser?.name || ''}
-            onChange={(e) => {
-              const value = e.target.value;
-              
-              if (/^[A-Za-z\s]*$/.test(value)) {
-                setEditUser({ ...editUser, name: value });
-              }
-            }}
-            fullWidth
-            style={{ marginBottom: '10px' }}
-            error={!!errors.name}
-            helperText={errors.name}
-          />
-          <TextField
-            label="Email"
-            value={editUser?.email || ''}
-            onChange={(e) => setEditUser({ ...editUser, email: e.target.value })}
-            fullWidth
-            style={{ marginBottom: '10px' }}
-            error={!!errors.email}
-            helperText={errors.email}
-          />
-          <FormControl fullWidth style={{ marginBottom: '10px' }} error={!!errors.role}>
-            <InputLabel>Role</InputLabel>
-            <Select
-              value={editUser?.role || ''}
-              onChange={(e) => setEditUser({ ...editUser, role: e.target.value })}
-            >
-              {roles.map((role) => (
-                <MenuItem key={role.id} value={role.name}>
-                  {role.name}
-                </MenuItem>
-              ))}
-            </Select>
-            {errors.role && <FormHelperText>{errors.role}</FormHelperText>}
-          </FormControl>
-          <FormControl fullWidth error={!!errors.status}>
-            <InputLabel>Status</InputLabel>
-            <Select
-              value={editUser?.status || ''}
-              onChange={(e) => setEditUser({ ...editUser, status: e.target.value })}
-            >
-              <MenuItem value="Active">Active</MenuItem>
-              <MenuItem value="Inactive">Inactive</MenuItem>
-            </Select>
-            {errors.status && <FormHelperText>{errors.status}</FormHelperText>}
-          </FormControl>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setIsEditDialogOpen(false)}>Cancel</Button>
-          <Button onClick={handleUpdateUser} color="primary">
-            Save
-          </Button>
-        </DialogActions>
-      </Dialog>
     </div>
   );
 };
