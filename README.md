@@ -61,6 +61,7 @@ If you haven't installed them yet, you can download Node.js from [here](https://
 5. Run the development server:
 
     ```bash
+    npm run json-server
     npm start
     ```
 
